@@ -18,7 +18,6 @@ const WeatherDisplay = () => {
     key: "e6df22f9fbd9ac23a946dba02f4c8f70",
     base: "https://api.openweathermap.org/data/2.5/",
   };
-  const [icon, setIcon] = useState("");
   const searchPressed = () => {
     fetch(`${api.base}weather?q=${city}&units=metric&APPID=${api.key}`)
       .then((res) => res.json())
@@ -31,10 +30,15 @@ const WeatherDisplay = () => {
         console.log("Temperature:", result.main.temp); // Log temperature
         console.log("Humidity:", result.main.humidity); // Log humidity
         console.log("Weather Condition:", result.weather[0].main);
-        setIcon(result.weather[0].icon);
       });
   };
-
+  let imazhi = sunny;
+  switch (weatherCondition) {
+    case "Rain":
+      imazhi = "";
+      break
+    
+  }
 
   return (
     <div className="weather-container">
@@ -55,7 +59,7 @@ const WeatherDisplay = () => {
       {city !== "" && (
         <>
           <div className="weather-info">
-            <img src={`https://openweathermap.org/img/wn/${icon}@2x.png`} alt="" className="imazhi"/>
+            <img src={imazhi} alt="" />
             <div className="extra-info">
               <h1>{temp}</h1>
               <p>{weatherCondition}</p>
