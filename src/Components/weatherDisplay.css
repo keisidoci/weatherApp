@@ -1,0 +1,35 @@
+.weather-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.weather-input {
+  border-radius: 50px;
+  background-color: white;
+  width: 300px;
+  height: 50px;
+  border: transparent;
+  border-color: white;
+  text-align: center;
+}
+.weather-input:focus {
+  border: 0px solid transparent;
+  outline: none;
+}
+
+.weather-input::placeholder {
+  text-align: center;
+}
+
+.weather-info {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.imazhi {
+  flex-shrink: 0;
+}
