@@ -1,12 +1,7 @@
-import WeatherDisplay from "./Components/WeatherDisplay"
+import WeatherDisplay from "./Components/WeatherDisplay";
 
 function App() {
-
-  return (
-    <>
-      <WeatherDisplay/>
-    </>
-  )
+  return <WeatherDisplay />;
 }
 
-export default App
+export default App;
