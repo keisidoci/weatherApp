@@ -1,9 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import WeatherInfo from "./WeatherInfo";
-import { useState, useEffect } from "react";
 import "../Components/weatherDisplay.css";
-import x from "../assets/fi-rr-cross.svg";
-import Transition from "../Transition";
 import sunny from "../assets/sunny.svg";
 import windPic from "../assets/windPic.svg";
 import humidityPic from "../assets/humidityPic.svg";
@@ -11,18 +9,20 @@ import rain from "../assets/rain.png";
 import cloud from "../assets/cloud.png";
 import drizzle from "../assets/drizzle.png";
 import snow from "../assets/snow.png";
-import axios from "axios";
+
 const WeatherDisplay = () => {
   const [city, setCity] = useState("");
-  const [temp, setTemperature] = useState();
-  const [humidity, setHumidity] = useState();
-  const [weatherCondition, setWeatherCondition] = useState();
-  const [wind, setWind] = useState();
-  const [imazhi, setImazhi] = useState(sunny);
+  const [temp, setTemperature] = useState(null);
+  const [humidity, setHumidity] = useState(null);
+  const [weatherCondition, setWeatherCondition] = useState(null);
+  const [wind, setWind] = useState(null);
+  const [weatherImage, setWeatherImage] = useState(sunny);
   const [error, setError] = useState("");
+
   useEffect(() => {
     searchPressed();
   }, [city]);
+
   const api = {
     key: "e6df22f9fbd9ac23a946dba02f4c8f70",
     base: "https://api.openweathermap.org/data/2.5/",
@@ -33,48 +33,70 @@ const WeatherDisplay = () => {
       const response = await axios.get(
         `${api.base}weather?q=${city}&units=metric&APPID=${api.key}`
       );
-      setTemperature(response.data.main.temp);
-      setHumidity(response.data.main.humidity);
-      setWeatherCondition(response.data.weather[0].main);
-      setWind(response.data.wind.speed);
-      console.log("Temperature:", response.data.main.temp); // Log temperature
-      console.log("Humidity:", response.data.main.humidity); // Log humidity
-      console.log("Weather Condition:", response.data.weather[0].main);
+      const { main, weather, wind: { speed } } = response.data;
+      setTemperature(main.temp);
+      setHumidity(main.humidity);
+      setWeatherCondition(weather[0].main);
+      setWind(speed);
+      setWeatherImage(getWeatherImage(weather[0].main));
+      setError("");
     } catch (error) {
       console.log("Error caught:", error);
-      console.log("Response data:", error.response.data); // Log response data
       setError("City does not exist");
+      // Reset other state values to avoid displaying stale data
+      setTemperature(null);
+      setHumidity(null);
+      setWeatherCondition(null);
+      setWind(null);
+      setWeatherImage(sunny);
     }
   };
 
-  useEffect(() => {
-    console.log(error, "heyyyyyyyyyyyyyyyyyyyyyy");
-  }, [error]);
-
-  useEffect(() => {
-    switch (weatherCondition) {
+  const getWeatherImage = (condition) => {
+    switch (condition) {
       case "Rain":
-        setImazhi(rain);
-        break;
+        return rain;
       case "Clouds":
-        setImazhi(cloud);
-        break;
+        return cloud;
       case "Snow":
-        setImazhi(snow);
-        break;
+        return snow;
       case "Drizzle":
-        setImazhi(drizzle);
-        break;
+        return drizzle;
+      default:
+        return sunny;
     }
-  }, [weatherCondition]);
+  };
+
+  const getWeatherGradient = (condition) => {
+    switch (condition) {
+      case "Rain":
+        return {
+          background: "var(--rainyGradient)",
+        };
+      case "Clouds":
+        return {
+          background: "var(--cloudyGradient)",
+        };
+      case "Snow":
+        return {
+          background: "var(--snowyGradient)",
+        };
+      case "Drizzle":
+        return {
+          background: "var(--sunnyGradient)", // Change this to the appropriate gradient
+        };
+      default:
+        return {
+          background: "var(--sunnyGradient)",
+        };
+    }
+  };
 
   return (
-    <div className="weather-container">
+    <div className="weather-container" style={getWeatherGradient(weatherCondition)}>
       <div className="weather-search">
         <input
           type="text"
-          name=""
-          id=""
           placeholder="Enter city or location"
           className="weather-input"
           onKeyDown={(e) => {
@@ -84,35 +106,33 @@ const WeatherDisplay = () => {
           }}
         />
       </div>
-      {city !== "" && (
-        <>
-          {error === "" ? (
-            <div className="weather-info">
-              <img src={imazhi} alt="" className="weatherImage" />
+      {city && (
+        <div className="weather-info">
+          {error ? (
+            <div>{error}</div>
+          ) : (
+            <>
+              <img src={weatherImage} alt="" className="weatherImage" />
               <div className="extra-info">
-                <h1 className="temperature">{temp + "°C"}</h1>
+                <h1 className="temperature">{temp}°C</h1>
                 <p className="weatherCondition">{weatherCondition}</p>
                 <p className="city">{city}</p>
                 <div className="weatherExtraInfo">
-                  {/* <Transition> */}
-                  {/* </Transition> */}
                   <WeatherInfo
                     title={"Humidity"}
-                    data={humidity + "%"}
+                    data={`${humidity}%`}
                     img={humidityPic}
                   />
                   <WeatherInfo
                     title={"Wind speed"}
-                    data={wind + "KM/h"}
+                    data={`${wind} KM/h`}
                     img={windPic}
                   />
                 </div>
               </div>
-            </div>
-          ) : (
-            <div>{error}</div>
+            </>
           )}
-        </>
+        </div>
       )}
     </div>
   );

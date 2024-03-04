@@ -5,6 +5,9 @@
   flex-direction: column;
   align-items: center;
 }
+.weather-search{
+  margin-bottom: 10px;
+}
 
 .weather-input {
   border-radius: 50px;
