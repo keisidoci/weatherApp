@@ -18,7 +18,7 @@ const animations = {
 export default function Transition({ children }) {
   return (
     <motion.div
-      style={{ height: "100%" }}
+      style={{ width: "100%" }}
       variants={animations}
       initial="initial"
       animate="animate"

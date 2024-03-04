@@ -1,15 +1,13 @@
+import "../Components/weatherDisplay.css"
 
-
-const WeatherInfo = ({title, data}) => {
+const WeatherInfo = ({title, data, img}) => {
   return (
-    <div>
-        <div className='extraInfo-container'>
-        <img src={""} className='extraInfo-img'/>
+     <div className='extraInfo-container'>
+        <img src={img} className='extraInfo-img'/>
         <div className='extraInfo-data'>
-            <p>{data}</p>
+            <p className="data">{data}</p>
             <p>{title}</p>
         </div>
-    </div>
     </div>
   )
 }
