@@ -34,13 +34,14 @@ const WeatherDisplay = () => {
       const response = await axios.get(
         `${api.base}weather?q=${city}&units=metric&APPID=${api.key}`
       );
-      const { main, weather, wind: { speed } } = response.data;
+      const { main, weather, wind: { speed }, sys } = response.data;
+      console.log(response.data)
       setTemperature(main.temp);
       setHumidity(main.humidity);
       setWeatherCondition(weather[0].main);
       setWind(speed);
       setWeatherImage(getWeatherImage(weather[0].main));
-      setCountry(main.sys.country)
+      setCountry(sys.country)
       setError("");
     } catch (error) {
       console.log("Error caught:", error);
@@ -118,7 +119,7 @@ const WeatherDisplay = () => {
               <div className="extra-info">
                 <h1 className="temperature">{Math.round(temp)}°C</h1>
                 <p className="weatherCondition">{weatherCondition}</p>
-                <p className="city">{city + country}</p>
+                <p className="city">{city + ", " + country}</p>
                 <div className="weatherExtraInfo">
                   <WeatherInfo
                     title={"Humidity"}
