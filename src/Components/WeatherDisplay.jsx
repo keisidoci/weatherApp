@@ -114,7 +114,7 @@ const WeatherDisplay = () => {
             <>
               <img src={weatherImage} alt="" className="weatherImage" />
               <div className="extra-info">
-                <h1 className="temperature">{temp}°C</h1>
+                <h1 className="temperature">{Math.round(temp)}°C</h1>
                 <p className="weatherCondition">{weatherCondition}</p>
                 <p className="city">{city}</p>
                 <div className="weatherExtraInfo">
