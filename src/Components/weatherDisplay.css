@@ -78,3 +78,10 @@
   width: 350px;
   height: auto;
 }
+
+@media (max-width: 768px) {
+  .weather-info, .weatherExtraInfo {
+    display: flex;
+    flex-direction: column;
+  }
+}
