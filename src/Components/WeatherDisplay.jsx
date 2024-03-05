@@ -12,6 +12,7 @@ import snow from "../assets/snow.png";
 
 const WeatherDisplay = () => {
   const [city, setCity] = useState("");
+  const [country, setCountry] = useState("")
   const [temp, setTemperature] = useState(null);
   const [humidity, setHumidity] = useState(null);
   const [weatherCondition, setWeatherCondition] = useState(null);
@@ -39,6 +40,7 @@ const WeatherDisplay = () => {
       setWeatherCondition(weather[0].main);
       setWind(speed);
       setWeatherImage(getWeatherImage(weather[0].main));
+      setCountry(main.sys.country)
       setError("");
     } catch (error) {
       console.log("Error caught:", error);
@@ -114,9 +116,9 @@ const WeatherDisplay = () => {
             <>
               <img src={weatherImage} alt="" className="weatherImage" />
               <div className="extra-info">
-                <h1 className="temperature">{temp}°C</h1>
+                <h1 className="temperature">{Math.round(temp)}°C</h1>
                 <p className="weatherCondition">{weatherCondition}</p>
-                <p className="city">{city}</p>
+                <p className="city">{city + country}</p>
                 <div className="weatherExtraInfo">
                   <WeatherInfo
                     title={"Humidity"}
